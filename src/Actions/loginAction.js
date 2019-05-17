@@ -29,8 +29,7 @@ export const login = (usuario, senha) => {
                     payload:{
                         uid:firebase.auth().currentUser.uid
                     }
-                }
-                
+                }                
             )
         } catch (error) {
             alert(error.code)

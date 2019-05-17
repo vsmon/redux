@@ -5,12 +5,12 @@ import {loadPessoas} from './Actions/listaAction'
 
 export class Lista extends Component{
     componentWillMount(){
-        this.props.loadPessoas()
+        this.props.loadPessoas(this.props.uid)
     }
     render(){
         return(
             <View>
-                <Button title='Carregar' onPress={()=>this.props.loadPessoas()}/>
+                <Button title='Carregar' onPress={()=>this.props.loadPessoas(this.props.uid)}/>
                 <FlatList
                     data={this.props.lista}
                     renderItem={({item})=><Text>ID: {item.id} Nome:{item.nome} Idade:{item.idade}</Text>}
@@ -23,7 +23,8 @@ export class Lista extends Component{
 
 const mapStateToProps = (state) => {
     return{
-        lista:state.lista.pessoas
+        lista:state.lista.pessoas,
+        uid:state.login.uid,
     }
 }
 

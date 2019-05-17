@@ -1,26 +1,32 @@
 import firebase from '../firebaseConnection'
 
 
-const pessoas = [] //[{id:2, nome:'teste', idade:30}]
+//[{id:2, nome:'teste', idade:30}]
 
-export const loadPessoas = () => {
+export const loadPessoas = (uid) => {
     return async (dispatch) => {
-        await firebase.database().ref(firebase.auth().currentUser.uid).child('pessoas').once('value', (snapshot)=>{
-            snapshot.forEach((childItem)=>{
-                pessoas.push({
-                    id:childItem.val().id,
-                    nome:childItem.val().nome,
-                    idade:childItem.val().idade,
+        try {            
+            await firebase.database().ref(uid).child('pessoas').on('value', (snapshot)=>{                
+                let pessoas = []
+                snapshot.forEach((childItem)=>{
+                    pessoas.push({
+                        id:childItem.val().id,
+                        nome:childItem.val().nome,
+                        idade:childItem.val().idade,
+                    })
                 })
-            })
-        })
-        dispatch(
-            {
-                type:'loadPessoas',
-                payload:{
-                    pessoas:pessoas
-                }
-            }
-        )
+                dispatch(
+                    {
+                        type:'loadPessoas',
+                        payload:{
+                            pessoas:pessoas
+                        }
+                    }
+                )
+            })            
+        } catch (error) {
+            alert(error.message)
+        }
+        
     }    
 }
