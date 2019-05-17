@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import {View, Button, FlatList, Text} from 'react-native'
+import {View, Button, FlatList, Text, TextInput} from 'react-native'
 import {connect} from 'react-redux'
-import {loadPessoas} from './Actions/listaAction'
+import {loadPessoas, changeNome} from './Actions/listaAction'
 
 export class Lista extends Component{
     componentWillMount(){
@@ -10,7 +10,9 @@ export class Lista extends Component{
     render(){
         return(
             <View>
-                <Button title='Carregar' onPress={()=>this.props.loadPessoas(this.props.uid)}/>
+                <TextInput placeholder='Nome...' onChangeText={(nome)=>this.props.changeNome(nome)}/>
+                <TextInput placeholder='Idade...'/>
+                <Button title='Salvar' onPress={()=>this.props.addPessoa(this.props.pessoa)}/>
                 <FlatList
                     data={this.props.lista}
                     renderItem={({item})=><Text>ID: {item.id} Nome:{item.nome} Idade:{item.idade}</Text>}
@@ -25,7 +27,8 @@ const mapStateToProps = (state) => {
     return{
         lista:state.lista.pessoas,
         uid:state.login.uid,
+        nome:state.login.nome,
     }
 }
 
-export default connect(mapStateToProps, {loadPessoas})(Lista)
+export default connect(mapStateToProps, {loadPessoas, changeNome})(Lista)

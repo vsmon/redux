@@ -30,3 +30,27 @@ export const loadPessoas = (uid) => {
         
     }    
 }
+
+export const changeNome = (nome) => {
+    return{
+        type: 'changeNome',
+        payload:{
+            nome:nome
+        }
+    }
+}
+
+export const addPessoa = (pessoa, uid) => {
+    return async dispatch => {
+        try {
+            const key = await firebase.ref(uid).child('pessoas').push().key
+            await firebase.database().ref(uid).child('pessoas').child(key).set({
+            id:value.key,
+            nome:pessoa.nome,
+            idade:pessoa.idade,
+        })
+        } catch (error) {
+            alert(error.message)
+        }        
+    }
+}
