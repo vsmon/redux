@@ -11,6 +11,8 @@ import Cadastro from './src/Cadastro'
 import Lista from './src/Lista'
 import thunk from 'redux-thunk'
 
+
+
 const store = createStore(reducers, applyMiddleware(thunk))
 
 const navigator = createStackNavigator({

@@ -1,6 +1,5 @@
 import firebase from '../firebaseConnection'
 
-
 //[{id:2, nome:'teste', idade:30}]
 
 export const loadPessoas = (uid) => {
@@ -40,17 +39,27 @@ export const changeNome = (nome) => {
     }
 }
 
-export const addPessoa = (pessoa, uid) => {
-    return async dispatch => {
+export const changeIdade = (idade) => {
+    return{
+        type: 'changeIdade',
+        payload:{
+            idade:idade
+        }
+    }
+}
+
+export const addPessoa = (uid, nome, idade) => {
+    return async (dispatch) => {
         try {
-            const key = await firebase.ref(uid).child('pessoas').push().key
+            
+            const key  = await firebase.database().ref(uid).child('pessoas').push().key
             await firebase.database().ref(uid).child('pessoas').child(key).set({
-            id:value.key,
-            nome:pessoa.nome,
-            idade:pessoa.idade,
-        })
+            id:key,
+            nome:nome,
+            idade:idade,
+        }) 
         } catch (error) {
-            alert(error.message)
+            alert(error.message + uid)
         }        
     }
 }
