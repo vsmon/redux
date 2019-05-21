@@ -1,11 +1,15 @@
 import React, {Component} from 'react'
 import {View, Button, FlatList, Text, TextInput} from 'react-native'
 import {connect} from 'react-redux'
-import {loadPessoas, changeNome, changeIdade, addPessoa} from './Actions/listaAction'
+import {loadPessoas, changeNome, changeIdade, addPessoa, pessoaRealmAdd, pessoaRealmDelete, pessoaRealmSync} from './Actions/listaAction'
 
 export class Lista extends Component{
     componentWillMount(){
-        this.props.loadPessoas(this.props.uid)
+        this.props.loadPessoas(this.props.uid)    
+        this.props.pessoaRealmSync(this.props.lista)    
+    }
+    componentDidMount(){
+        
     }
     render(){
         return(
@@ -29,6 +33,23 @@ export class Lista extends Component{
                     renderItem={({item})=><Text>ID: {item.id} Nome:{item.nome} Idade:{item.idade}</Text>}
                     keyExtractor={(item)=>item.id.toString()}
                 />
+                <Button 
+                    title='Salvar' 
+                    onPress={()=>this.props.pessoaRealmAdd()}
+                />
+                <Button 
+                    title='Excluir' 
+                    onPress={()=>this.props.pessoaRealmDelete()}
+                />
+                <Button 
+                    title='Carregar' 
+                    onPress={()=>this.props.pessoaRealmSync(this.props.lista)}
+                />
+                <FlatList
+                    data={this.props.listaRealmSync}
+                    renderItem={({item})=><Text>ID: {item.id} Nome:{item.nome} Idade:{item.idade}</Text>}
+                    keyExtractor={(item)=>item.id.toString()}
+                />
             </View>
         )
     }
@@ -37,10 +58,12 @@ export class Lista extends Component{
 const mapStateToProps = (state) => {
     return{
         lista:state.lista.pessoas,
+        listaRealm:state.lista.pessoasRealm,
+        listaRealmSync:state.lista.realmSync,
         uid:state.login.uid,
         nome:state.lista.nome,
         idade:state.lista.idade,
     }
 }
 
-export default connect(mapStateToProps, {loadPessoas, changeNome, changeIdade, addPessoa})(Lista)
+export default connect(mapStateToProps, {loadPessoas, changeNome, changeIdade, addPessoa, pessoaRealmAdd, pessoaRealmDelete, pessoaRealmSync})(Lista)
